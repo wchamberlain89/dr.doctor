@@ -1,8 +1,9 @@
-export class GeocodeApi {
-	get() {
-    return new Promise(function(resolveFunction, rejectFunction) {
+export function setURL(url) {
+	console.log(`stored ${url} in setURL function`);
+	return function (parameters)  {
+		return new Promise(function(resolveFunction, rejectFunction) {
       let request = new XMLHttpRequest();
-      let url = `https://api.geocod.io/v1.3/geocode?city=portland&api_key=${process.env.GEOCODE_KEY}`;
+      let url = `https://api.betterdoctor.com/2016-03-01/doctors?query=${parameters.query}&user_key=${process.env.exports.apiKey}`;
 
       request.onload = function() {
         if (this.status === 200) {
@@ -15,5 +16,5 @@ export class GeocodeApi {
       request.open("GET", url, true);
       request.send();
     });
-  }
+	}
 }
