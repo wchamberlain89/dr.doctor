@@ -39,14 +39,22 @@ $(document).ready(function(){
         const results = JSON.parse(response);
         const location = getLocationString(results.results[0].location);
 
-        const parameters = parseParams({location: location});
+        const parameters = parseParams({location: location, q: query});
+        console.log(parameters)
         const drApiUrl = generateUrl(drApi, parameters);
 
-        const getDoctors = get(drApiUrl);
-        return getDoctors();
+        
+        return get(drApiUrl)();
       })
       .then(function(response){
         response = JSON.parse(response);
+        var data = response.data.map((doctor) => {
+          return doctor.profile
+        });
+        data.forEach((profile) => {
+          $("#results").append(`<li>First-Name - ${profile.first_name} Last-Name - ${profile.last_name}</li>`)
+        });
+
       });
 
   });
