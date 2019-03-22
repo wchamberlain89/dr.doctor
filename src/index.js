@@ -23,6 +23,8 @@ $(document).ready(function(){
   const geocode = new Geocode();
   const drApi = new DrApi();
 
+  console.log(drApi.baseUrl)
+
   $("form").on("submit",(event) => {
   	event.preventDefault();
   	
@@ -36,9 +38,15 @@ $(document).ready(function(){
       .then(function(response) {
         const results = JSON.parse(response);
         const location = getLocationString(results.results[0].location);
-        console.log(location);
-        const apiUrl = generateUrl(drApi, {location: location})
-        console.log(generateUrl(drApi, {location: location}))
+
+        const parameters = parseParams({location: location});
+        const drApiUrl = generateUrl(drApi, parameters);
+
+        const getDoctors = get(drApiUrl);
+        return getDoctors();
+      })
+      .then(function(response){
+        response = JSON.parse(response);
       });
 
   });
