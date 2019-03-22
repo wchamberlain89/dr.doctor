@@ -7,9 +7,14 @@ $(document).ready(function(){
 
   $("form").on("submit",() => {
   	const query = $("#search").val();
-  	console.log(query);
-  	console.log(process.env.exports.apiKey);
-  	// const promise = doctorApi.get(query);
+  	const promise = doctorApi.get(query);
+  	
   	event.preventDefault();
+
+  	promise.then((res) => {
+  		console.log(res);
+  	}, (err) => {
+  		console.log(err);
+  	});
   });
 });
