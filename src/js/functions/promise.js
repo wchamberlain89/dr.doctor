@@ -1,10 +1,10 @@
-export function setUrl(url) {
-  return function (parameters)  {
+export const get = (url) => {
+  
+  return () => {
 
-    return new Promise(function(resolveFunction, rejectFunction) {
+    return new Promise((resolveFunction, rejectFunction) => {
       let request = new XMLHttpRequest();
-      console.log(url)
-      url = url + parameters;
+      console.log("promise returned")
       request.onload = function() {
         if (this.status === 200) {
           resolveFunction(request.response);
@@ -16,5 +16,7 @@ export function setUrl(url) {
       request.open("GET", url, true);
       request.send();
     });
+
   }
+
 }
