@@ -30,9 +30,9 @@ $(document).ready(function(){
   	
   	const query = $("#search").val();
 
-    const geocodeParams = parseParams({city : 'portland'});
-    const apiCall = generateUrl(geocode, geocodeParams);
-    const getLocation = get(apiCall);
+    const geocodeParams = parseParams({city : 'portland', state: 'or'});
+    const locationUrl = generateUrl(geocode, geocodeParams);
+    const getLocation = get(locationUrl);
 
     getLocation()
       .then(function(response) {
@@ -40,20 +40,23 @@ $(document).ready(function(){
         const location = getLocationString(results.results[0].location);
 
         const parameters = parseParams({location: location, q: query});
-        console.log(parameters)
         const drApiUrl = generateUrl(drApi, parameters);
-
         
         return get(drApiUrl)();
       })
       .then(function(response){
         response = JSON.parse(response);
         var data = response.data.map((doctor) => {
-          return doctor.profile
+          return {profile : doctor.profile, address : doctor.practices[0].visit_address, phones : doctor.practices[0].phones}
         });
-        data.forEach((profile) => {
-          $("#results").append(`<li>First-Name - ${profile.first_name} Last-Name - ${profile.last_name}</li>`)
+
+        console.log(data)
+        let html = "";
+        data.forEach((doctor) => {
+          html += `<ul>${doctor.profile.first_name} ${doctor.profile.last_name}
+          <li>${doctor.address.street} ${doctor.address.city} ${doctor.address.state_long}</li></ul>`
         });
+          $("#results").html(html)
 
       });
 
