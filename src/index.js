@@ -16,7 +16,6 @@ $(document).ready(function(){
   	const query = $("#search").val();
   	
     const url = geocode.generateUrl({city : 'portland', state: 'or', [geocode.keyName]: geocode.key});
-    console.log(url);
     
     geocode.get(url)
       .then((response) => {
@@ -30,14 +29,18 @@ $(document).ready(function(){
         const data = response.data.map((doctor) => {
           return {profile : doctor.profile, address : doctor.practices[0].visit_address, phones : doctor.practices[0].phones}
         });
-
-        let html = "";
-        data.forEach((doctor) => {
-          html += `<ul>${doctor.profile.first_name} ${doctor.profile.last_name}
-          <li>${doctor.address.street} ${doctor.address.city} ${doctor.address.state_long}</li></ul>`
-        });
+          let html = "";
+        if(data.length > 0) {
+          data.forEach((doctor) => {
+            html += `<ul>${doctor.profile.first_name} ${doctor.profile.last_name}
+            <li>${doctor.address.street} ${doctor.address.city} ${doctor.address.state_long}</li></ul>`
+          });
+        } else {
+          html += `<span>We're sorry but your search yielded no results</span>`;
+        }
           $("#results").html(html)
-      });
+
+        });
 
   });
 });
